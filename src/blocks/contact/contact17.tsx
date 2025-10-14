@@ -27,12 +27,15 @@ import { format } from "date-fns";
 const Contact17 = () => {
   const form = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      companySize: "",
-      message: "",
-      referrer: "",
+      title: "",
+      name: "",
+      pax: "",
+      fromDate: "",
+      toDate: "",
+      days: "",
+      inclusions: "",
+      exclusions: "",
+      approximateCost: "",
     },
   });
 
@@ -65,18 +68,65 @@ const Contact17 = () => {
     setCostBlocks(costBlocks.filter((block) => block.uid !== uid));
   };
 
-  const onSubmit = (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    companySize: string;
-    message: string;
-    referrer: string;
-  }) => {
-    console.log(data);
-    // Add your form submission logic here
+  const onSubmit = (data: Record<string, any>) => {
+    const {
+      title,
+      name,
+      pax,
+      fromDate,
+      toDate,
+      days,
+      inclusions,
+      exclusions,
+      approximateCost,
+      ...rest
+    } = data;
+
+    // Extract cost blocks
+    const costBlocks = Object.entries(rest)
+      .reduce((acc, [key, value]) => {
+        const match = key.match(/^cost-(.+)-(entity|details)$/);
+        if (!match) return acc;
+        const [_, uid, field] = match;
+        acc[uid] = acc[uid] || {};
+        acc[uid][field] = value;
+        return acc;
+      }, {} as Record<string, { entity: string; details: string }>);
+
+    // Extract day blocks
+    const dayBlocks = Object.entries(rest)
+      .reduce((acc, [key, value]) => {
+        const match = key.match(/^day-(.+)-(number|details)$/);
+        if (!match) return acc;
+        const [_, uid, field] = match;
+        acc[uid] = acc[uid] || {};
+        acc[uid][field] = value;
+        return acc;
+      }, {} as Record<string, { number: string; details: string }>);
+
+    // Final structured output
+    const output = {
+      title,
+      name,
+      pax,
+      fromDate,
+      toDate,
+      days,
+      inclusions,
+      exclusions,
+      approximateCost,
+      costs: Object.values(costBlocks),
+      itinerary: Object.values(dayBlocks).sort((a, b) => Number(a.number) - Number(b.number)),
+    };
+
+    console.log(JSON.stringify(output, null, 2));
   };
 
+
+  const currentYear = new Date().getFullYear();
+  const minDate = new Date(); // Current date
+  const maxDate = new Date(currentYear + 1, 11, 31); // Dec 31, next year
+  
   return (
     <section className="bg-muted/200 py-32">
       <div className="container">
@@ -94,43 +144,71 @@ const Contact17 = () => {
                   <FormField
                     control={form.control}
                     name="title"
-                    render={({ field }) => (
+                    rules={{ required: "Title is required" }}
+                    render={({ field, fieldState }) => (
                       <FormItem className="sm:col-span-2">
                         <FormLabel>Title</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Dubai - 6 Days Trip" />
+                          <Input
+                            {...field}
+                            placeholder="Dubai - 6 Days Trip"
+                          />
                         </FormControl>
+                        {fieldState.error && (
+                          <p className="text-sm text-destructive mt-1">
+                            {fieldState.error.message}
+                          </p>
+                        )}
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
                     name="name"
-                    render={({ field }) => (
+                    rules={{ required: "Name is required" }}
+                    render={({ field, fieldState }) => (
                       <FormItem className="sm:col-span-2">
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Ashok" />
+                          <Input
+                            {...field}
+                            placeholder="Ashok"
+                          />
                         </FormControl>
+                        {fieldState.error && (
+                          <p className="text-sm text-destructive mt-1">
+                            {fieldState.error.message}
+                          </p>
+                        )}
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
                     name="pax"
-                    render={({ field }) => (
+                    rules={{ required: "PAX is required" }}
+                    render={({ field, fieldState }) => (
                       <FormItem className="sm:col-span-2">
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>PAX</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="6 Adults + 3 Child (7, 3 year & 1 infant)" />
+                          <Input
+                            {...field}
+                            placeholder="6 Adults + 3 Child (7, 3 year & 1 infant)"
+                          />
                         </FormControl>
+                        {fieldState.error && (
+                          <p className="text-sm text-destructive mt-1">
+                            {fieldState.error.message}
+                          </p>
+                        )}
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
                     name="fromDate"
-                    render={({ field }) => (
+                    rules={{ required: "Please select the from date" }}
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>From Date</FormLabel>
                         <Popover open={fromOpen} onOpenChange={setFromDateOpen}>
@@ -151,20 +229,31 @@ const Contact17 = () => {
                               mode="single"
                               selected={field.value}
                               captionLayout="dropdown"
+                              disabled={(date) => date < minDate || date > maxDate}
+                              startMonth={minDate}
+                              endMonth={maxDate}
                               onSelect={(selectedDate) => {
-                                field.onChange(selectedDate); // ✅ updates react-hook-form
+                                field.onChange(selectedDate);
                                 setFromDateOpen(false);
                               }}
                             />
+
                           </PopoverContent>
                         </Popover>
+                        {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
                       </FormItem>
                     )}
                   />
+                  <br />
                   <FormField
                     control={form.control}
                     name="toDate"
-                    render={({ field }) => (
+                    rules={{ required: "Please select the to date" }}
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>To Date</FormLabel>
                         <Popover open={toOpen} onOpenChange={setToDateOpen}>
@@ -185,6 +274,9 @@ const Contact17 = () => {
                               mode="single"
                               selected={field.value}
                               captionLayout="dropdown"
+                              disabled={(date) => date < minDate || date > maxDate}
+                              startMonth={minDate}
+                              endMonth={maxDate}
                               onSelect={(selectedDate) => {
                                 field.onChange(selectedDate); // ✅ updates react-hook-form
                                 setToDateOpen(false);
@@ -192,6 +284,11 @@ const Contact17 = () => {
                             />
                           </PopoverContent>
                         </Popover>
+                        {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
                       </FormItem>
                     )}
                   />
@@ -200,7 +297,8 @@ const Contact17 = () => {
                     <FormField
                       control={form.control}
                       name="days"
-                      render={({ field }) => (
+                      rules={{ required: "Please select the number of days" }}
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel>Number of days</FormLabel>
                           <FormControl>
@@ -220,6 +318,11 @@ const Contact17 = () => {
                               </SelectContent>
                             </Select>
                           </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
                         </FormItem>
                       )}
                     />
@@ -405,6 +508,7 @@ const Contact17 = () => {
                           <Textarea
                             {...field}
                             placeholder="Provide the list of inclusions for this trip..."
+                            className="min-h-[150px]" // 👈 Adjust height here
                           />
                         </FormControl>
                         {fieldState.error && (
@@ -415,7 +519,7 @@ const Contact17 = () => {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="exclusions"
@@ -427,6 +531,7 @@ const Contact17 = () => {
                           <Textarea
                             {...field}
                             placeholder="Provide the list of exclusions for this trip..."
+                            className="min-h-[150px]" // 👈 Adjust height here
                           />
                         </FormControl>
                         {fieldState.error && (
