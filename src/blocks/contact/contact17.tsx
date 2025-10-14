@@ -37,6 +37,7 @@ const Contact17 = () => {
       exclusions: "",
       approximateCost: "",
     },
+    shouldUnregister: true,
   });
 
   const [fromOpen, setFromDateOpen] = React.useState(false)
@@ -519,7 +520,7 @@ const Contact17 = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="exclusions"
