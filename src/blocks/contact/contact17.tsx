@@ -71,7 +71,6 @@ const Contact17 = () => {
   };
 
   const onSubmit = async (data: Record<string, any>) => {
-    setIsGenerating(true);
     const {
       title,
       name,
@@ -126,10 +125,11 @@ const Contact17 = () => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      window.open("http://localhost:3000/trip/stream", "_blank");
+      window.open("https://lovelytrails-itinerary-generator-web-server.vercel.app/trip/stream", "_blank");
     } else {
+      setIsGenerating(true);
       try {
-        const response = await fetch("http://localhost:3000/trip/stream", {
+        const response = await fetch("https://lovelytrails-itinerary-generator-web-server.vercel.app/trip/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(output),
@@ -151,7 +151,7 @@ const Contact17 = () => {
         setIsGenerating(false);
       }
     }
-    
+
   };
 
 
