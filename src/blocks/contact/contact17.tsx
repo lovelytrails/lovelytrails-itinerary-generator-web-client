@@ -166,184 +166,21 @@ const Contact17 = () => {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="grid gap-6 sm:grid-cols-2"
+                  className="flex flex-col field-block"
                 >
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    rules={{ required: "Title is required" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Dubai - 6 Days Trip"
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-sm text-destructive mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    rules={{ required: "Name is required" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Ashok"
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-sm text-destructive mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="pax"
-                    rules={{ required: "PAX is required" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>PAX</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="6 Adults + 3 Child (7, 3 year & 1 infant)"
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-sm text-destructive mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="fromDate"
-                    rules={{ required: "Please select the from date" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>From Date</FormLabel>
-                        <Popover open={fromOpen} onOpenChange={setFromDateOpen}>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <button
-                                type="button"
-                                className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
-                                  field.value ? "text-foreground" : "text-muted-foreground"
-                                }`}
-                              >
-                                {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
-                              </button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              captionLayout="dropdown"
-                              disabled={(date) => date < minDate || date > maxDate}
-                              startMonth={minDate}
-                              endMonth={maxDate}
-                              onSelect={(selectedDate) => {
-                                field.onChange(selectedDate);
-                                setFromDateOpen(false);
-                              }}
-                            />
-
-                          </PopoverContent>
-                        </Popover>
-                        {fieldState.error && (
-                            <p className="text-sm text-destructive mt-1">
-                              {fieldState.error.message}
-                            </p>
-                          )}
-                      </FormItem>
-                    )}
-                  />
-                  <br />
-                  <FormField
-                    control={form.control}
-                    name="toDate"
-                    rules={{ required: "Please select the to date" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>To Date</FormLabel>
-                        <Popover open={toOpen} onOpenChange={setToDateOpen}>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <button
-                                type="button"
-                                className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
-                                  field.value ? "text-foreground" : "text-muted-foreground"
-                                }`}
-                              >
-                                {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
-                              </button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              captionLayout="dropdown"
-                              disabled={(date) => date < minDate || date > maxDate}
-                              startMonth={minDate}
-                              endMonth={maxDate}
-                              onSelect={(selectedDate) => {
-                                field.onChange(selectedDate); // ✅ updates react-hook-form
-                                setToDateOpen(false);
-                              }}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        {fieldState.error && (
-                            <p className="text-sm text-destructive mt-1">
-                              {fieldState.error.message}
-                            </p>
-                          )}
-                      </FormItem>
-                    )}
-                  />
-                  <div className="col-span-2 space-y-4">
-                    <h3 className="text-lg font-semibold">Day Details</h3>
+                  <div className="contents w-full">
                     <FormField
                       control={form.control}
-                      name="days"
-                      rules={{ required: "Please select the number of days" }}
+                      name="title"
+                      rules={{ required: "Title is required" }}
                       render={({ field, fieldState }) => (
-                        <FormItem>
-                          <FormLabel>Number of days</FormLabel>
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>Title</FormLabel>
                           <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select number of days" />
-                              </SelectTrigger>
-                              <SelectContent className="max-h-80 overflow-y-auto">
-                                {Array.from({ length: 50 }, (_, i) => (
-                                  <SelectItem key={i + 1} value={(i + 1).toString()}>
-                                    {i + 1}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            <Input
+                              {...field}
+                              placeholder="Dubai - 6 Days Trip"
+                            />
                           </FormControl>
                           {fieldState.error && (
                             <p className="text-sm text-destructive mt-1">
@@ -353,286 +190,451 @@ const Contact17 = () => {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      rules={{ required: "Name is required" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Ashok"
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="pax"
+                      rules={{ required: "PAX is required" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>PAX</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="6 Adults + 3 Child (7, 3 year & 1 infant)"
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="fromDate"
+                      rules={{ required: "Please select the from date" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <FormLabel>From Date</FormLabel>
+                          <Popover open={fromOpen} onOpenChange={setFromDateOpen}>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <button
+                                  type="button"
+                                  className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
+                                    field.value ? "text-foreground" : "text-muted-foreground"
+                                  }`}
+                                >
+                                  {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
+                                </button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                captionLayout="dropdown"
+                                disabled={(date) => date < minDate || date > maxDate}
+                                startMonth={minDate}
+                                endMonth={maxDate}
+                                onSelect={(selectedDate) => {
+                                  field.onChange(selectedDate);
+                                  setFromDateOpen(false);
+                                }}
+                              />
+
+                            </PopoverContent>
+                          </Popover>
+                          {fieldState.error && (
+                              <p className="text-sm text-destructive mt-1">
+                                {fieldState.error.message}
+                              </p>
+                            )}
+                        </FormItem>
+                      )}
+                    />
                     <br />
-                    {selectedDays > 0 && 
-                      dayBlocks.map((block, index) => (
-                      <div key={block.uid} className="space-y-2 border p-4 rounded-md relative">
-                        <FormField
-                          control={form.control}
-                          name={`day-${block.uid}-number`}
-                          rules={{
-                            required: "Day number is required",
-                            validate: (value) => {
-                              const num = parseInt(value, 10);
-                              if (isNaN(num)) return "Must be a number";
-                              if (num < 1) return "Day must be at least 1";
-                              if (num > selectedDays) return `Day cannot exceed ${selectedDays}`;
-                              return true;
-                            },
-                          }}
-                          render={({ field, fieldState }) => (
-                            <FormItem>
-                              <FormLabel>Day #</FormLabel>
+                    <FormField
+                      control={form.control}
+                      name="toDate"
+                      rules={{ required: "Please select the to date" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <FormLabel>To Date</FormLabel>
+                          <Popover open={toOpen} onOpenChange={setToDateOpen}>
+                            <PopoverTrigger asChild>
                               <FormControl>
-                                <Input
-                                  {...field}
-                                  type="text"
-                                  inputMode="numeric"
-                                  pattern="[0-9]*"
-                                  placeholder="Enter day number"
-                                  onKeyDown={(e) => {
-                                    const key = e.key;
-
-                                    // Allow navigation keys
-                                    if (
-                                      key === "Backspace" ||
-                                      key === "Delete" ||
-                                      key === "ArrowLeft" ||
-                                      key === "ArrowRight" ||
-                                      key === "Tab"
-                                    ) {
-                                      return;
-                                    }
-
-                                    // Allow only digits
-                                    if (!/^\d$/.test(key)) {
-                                      e.preventDefault();
-                                      return;
-                                    }
-
-                                    // Predict resulting value
-                                    const currentValue = e.currentTarget.value;
-                                    const selectionStart = e.currentTarget.selectionStart ?? currentValue.length;
-                                    const selectionEnd = e.currentTarget.selectionEnd ?? currentValue.length;
-
-                                    const predictedValue =
-                                      currentValue.slice(0, selectionStart) + key + currentValue.slice(selectionEnd);
-                                    const predictedNumber = parseInt(predictedValue, 10);
-
-                                    // Block if out of range
-                                    if (isNaN(predictedNumber) || predictedNumber < 1 || predictedNumber > selectedDays) {
-                                      e.preventDefault();
-                                    }
-                                  }}
-                                />
+                                <button
+                                  type="button"
+                                  className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
+                                    field.value ? "text-foreground" : "text-muted-foreground"
+                                  }`}
+                                >
+                                  {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
+                                </button>
                               </FormControl>
-                              {fieldState.error && (
-                                <p className="text-sm text-destructive mt-1">
-                                  {fieldState.error.message}
-                                </p>
-                              )}
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`day-${block.uid}-details`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Day Details</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  {...field}
-                                  placeholder="Describe activities for this day"
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        <div className="flex justify-end gap-2 mt-2">
-                          {index === dayBlocks.length - 1 && dayBlocks.length < selectedDays && (
-                            <Button type="button" onClick={addDayBlock} variant="default">
-                              ➕ Add Day
-                            </Button>
-                          )}
-                          {dayBlocks.length > 1 && (
-                            <Button
-                              type="button"
-                              onClick={() => deleteDayBlock(block.uid)}
-                              variant="destructive"
-                            >
-                              🗑️ Delete
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <br />
-                  <div className="col-span-2 space-y-4">
-                    <h3 className="text-lg font-semibold mt-6">Cost Details</h3>
-                    {costBlocks.map((block, index) => (
-                      <div key={block.uid} className="space-y-2 border p-4 rounded-md relative">
-                        <FormField
-                          control={form.control}
-                          name={`cost-${block.uid}-entity`}
-                          rules={{ required: "Cost entity is required" }}
-                          render={({ field, fieldState }) => (
-                            <FormItem>
-                              <FormLabel>Cost Entity</FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  placeholder="e.g. Hotel, Transport, Meals"
-                                />
-                              </FormControl>
-                              {fieldState.error && (
-                                <p className="text-sm text-destructive mt-1">
-                                  {fieldState.error.message}
-                                </p>
-                              )}
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`cost-${block.uid}-details`}
-                          rules={{ required: "Cost details are required" }}
-                          render={({ field, fieldState }) => (
-                            <FormItem>
-                              <FormLabel>Cost Details</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  {...field}
-                                  placeholder="Describe the cost breakdown or notes"
-                                />
-                              </FormControl>
-                              {fieldState.error && (
-                                <p className="text-sm text-destructive mt-1">
-                                  {fieldState.error.message}
-                                </p>
-                              )}
-                            </FormItem>
-                          )}
-                        />
-                        <div className="flex justify-end gap-2 mt-2">
-                          {index === costBlocks.length - 1 && costBlocks.length < 10 && (
-                            <Button type="button" onClick={addCostBlock} variant="default">
-                              ➕ Add Cost
-                            </Button>
-                          )}
-                          {costBlocks.length > 1 && (
-                            <Button
-                              type="button"
-                              onClick={() => deleteCostBlock(block.uid)}
-                              variant="destructive"
-                            >
-                              🗑️ Delete
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="inclusions"
-                    rules={{ required: "Inclusions are required" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Inclusions</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="Provide the list of inclusions for this trip..."
-                            className="min-h-[150px]" // 👈 Adjust height here
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-sm text-destructive mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="exclusions"
-                    rules={{ required: "Exclusions are required" }}
-                    render={({ field, fieldState }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Exclusions</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="Provide the list of exclusions for this trip..."
-                            className="min-h-[150px]" // 👈 Adjust height here
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-sm text-destructive mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="approximateCost"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Approximate Cost</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                captionLayout="dropdown"
+                                disabled={(date) => date < minDate || date > maxDate}
+                                startMonth={minDate}
+                                endMonth={maxDate}
+                                onSelect={(selectedDate) => {
+                                  field.onChange(selectedDate); // ✅ updates react-hook-form
+                                  setToDateOpen(false);
+                                }}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          {fieldState.error && (
+                              <p className="text-sm text-destructive mt-1">
+                                {fieldState.error.message}
+                              </p>
+                            )}
+                        </FormItem>
+                      )}
+                    />
+                    <div className="col-span-2 space-y-4">
+                      <h3 className="text-lg font-semibold">Day Details</h3>
+                      <FormField
+                        control={form.control}
+                        name="days"
+                        rules={{ required: "Please select the number of days" }}
+                        render={({ field, fieldState }) => (
+                          <FormItem>
+                            <FormLabel>Number of days</FormLabel>
                             <FormControl>
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select cost range" />
-                              </SelectTrigger>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select number of days" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-80 overflow-y-auto">
+                                  {Array.from({ length: 50 }, (_, i) => (
+                                    <SelectItem key={i + 1} value={(i + 1).toString()}>
+                                      {i + 1}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="5k-15k">₹ 5K - ₹ 15K</SelectItem>
-                              <SelectItem value="15k-30k">
-                                ₹ 15K - ₹ 30K
-                              </SelectItem>
-                              <SelectItem value="30k-50k">
-                                ₹ 30K - ₹ 50K
-                              </SelectItem>
-                              <SelectItem value="50k-100k">
-                                ₹ 50K - ₹ 100K
-                              </SelectItem>
-                              <SelectItem value="100k-250k">
-                                ₹ 100K - ₹ 250K
-                              </SelectItem>
-                              <SelectItem value="250k+">₹ 250K+</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    disabled={isGenerating}
-                    className={`sm:col-span-2 ${
-                      isGenerating
-                        ? 'bg-gradient-to-r from-green-500 to-green-700 animate-progress'
-                        : 'bg-green-600 hover:bg-green-700'
-                    }`}
-                  >
-                    {isGenerating ? (
-                      <span className="w-full text-center">Generating…</span>
-                    ) : (
-                      <span>Generate PDF</span>
-                    )}
-                  </Button>
-                  <p className="text-muted-foreground text-xs sm:col-span-2">
-                    You acknowledge that you've reviewed and agreed to our{" "}
-                    <a href="https://www.lovelytrails.com/privacy.php" target="_blank" className="text-primary hover:underline">
-                      Privacy Policy
-                    </a>{" "}
-                    and{" "}
-                    <a href="https://www.lovelytrails.com/tnc.php" target="_blank" className="text-primary hover:underline">
-                      Terms of Service
-                    </a>
-                  </p>
+                            {fieldState.error && (
+                              <p className="text-sm text-destructive mt-1">
+                                {fieldState.error.message}
+                              </p>
+                            )}
+                          </FormItem>
+                        )}
+                      />
+                      <br />
+                      {selectedDays > 0 && 
+                        dayBlocks.map((block, index) => (
+                        <div key={block.uid} className="space-y-2 border p-4 rounded-md relative">
+                          <FormField
+                            control={form.control}
+                            name={`day-${block.uid}-number`}
+                            rules={{
+                              required: "Day number is required",
+                              validate: (value) => {
+                                const num = parseInt(value, 10);
+                                if (isNaN(num)) return "Must be a number";
+                                if (num < 1) return "Day must be at least 1";
+                                if (num > selectedDays) return `Day cannot exceed ${selectedDays}`;
+                                return true;
+                              },
+                            }}
+                            render={({ field, fieldState }) => (
+                              <FormItem>
+                                <FormLabel>Day #</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="text"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    placeholder="Enter day number"
+                                    onKeyDown={(e) => {
+                                      const key = e.key;
+
+                                      // Allow navigation keys
+                                      if (
+                                        key === "Backspace" ||
+                                        key === "Delete" ||
+                                        key === "ArrowLeft" ||
+                                        key === "ArrowRight" ||
+                                        key === "Tab"
+                                      ) {
+                                        return;
+                                      }
+
+                                      // Allow only digits
+                                      if (!/^\d$/.test(key)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+
+                                      // Predict resulting value
+                                      const currentValue = e.currentTarget.value;
+                                      const selectionStart = e.currentTarget.selectionStart ?? currentValue.length;
+                                      const selectionEnd = e.currentTarget.selectionEnd ?? currentValue.length;
+
+                                      const predictedValue =
+                                        currentValue.slice(0, selectionStart) + key + currentValue.slice(selectionEnd);
+                                      const predictedNumber = parseInt(predictedValue, 10);
+
+                                      // Block if out of range
+                                      if (isNaN(predictedNumber) || predictedNumber < 1 || predictedNumber > selectedDays) {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                  />
+                                </FormControl>
+                                {fieldState.error && (
+                                  <p className="text-sm text-destructive mt-1">
+                                    {fieldState.error.message}
+                                  </p>
+                                )}
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`day-${block.uid}-details`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Day Details</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    placeholder="Describe activities for this day"
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <div className="flex justify-end gap-2 mt-2">
+                            {index === dayBlocks.length - 1 && dayBlocks.length < selectedDays && (
+                              <Button type="button" onClick={addDayBlock} variant="default">
+                                ➕ Add Day
+                              </Button>
+                            )}
+                            {dayBlocks.length > 1 && (
+                              <Button
+                                type="button"
+                                onClick={() => deleteDayBlock(block.uid)}
+                                variant="destructive"
+                              >
+                                🗑️ Delete
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <br />
+                    <div className="col-span-2 space-y-4">
+                      <h3 className="text-lg font-semibold mt-6">Cost Details</h3>
+                      {costBlocks.map((block, index) => (
+                        <div key={block.uid} className="space-y-2 border p-4 rounded-md relative">
+                          <FormField
+                            control={form.control}
+                            name={`cost-${block.uid}-entity`}
+                            rules={{ required: "Cost entity is required" }}
+                            render={({ field, fieldState }) => (
+                              <FormItem>
+                                <FormLabel>Cost Entity</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    placeholder="e.g. Hotel, Transport, Meals"
+                                  />
+                                </FormControl>
+                                {fieldState.error && (
+                                  <p className="text-sm text-destructive mt-1">
+                                    {fieldState.error.message}
+                                  </p>
+                                )}
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`cost-${block.uid}-details`}
+                            rules={{ required: "Cost details are required" }}
+                            render={({ field, fieldState }) => (
+                              <FormItem>
+                                <FormLabel>Cost Details</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    placeholder="Describe the cost breakdown or notes"
+                                  />
+                                </FormControl>
+                                {fieldState.error && (
+                                  <p className="text-sm text-destructive mt-1">
+                                    {fieldState.error.message}
+                                  </p>
+                                )}
+                              </FormItem>
+                            )}
+                          />
+                          <div className="flex justify-end gap-2 mt-2">
+                            {index === costBlocks.length - 1 && costBlocks.length < 10 && (
+                              <Button type="button" onClick={addCostBlock} variant="default">
+                                ➕ Add Cost
+                              </Button>
+                            )}
+                            {costBlocks.length > 1 && (
+                              <Button
+                                type="button"
+                                onClick={() => deleteCostBlock(block.uid)}
+                                variant="destructive"
+                              >
+                                🗑️ Delete
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="inclusions"
+                      rules={{ required: "Inclusions are required" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>Inclusions</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="Provide the list of inclusions for this trip..."
+                              className="min-h-[150px]" // 👈 Adjust height here
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="exclusions"
+                      rules={{ required: "Exclusions are required" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>Exclusions</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="Provide the list of exclusions for this trip..."
+                              className="min-h-[150px]" // 👈 Adjust height here
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="approximateCost"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Approximate Cost</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select cost range" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="5k-15k">₹ 5K - ₹ 15K</SelectItem>
+                                <SelectItem value="15k-30k">
+                                  ₹ 15K - ₹ 30K
+                                </SelectItem>
+                                <SelectItem value="30k-50k">
+                                  ₹ 30K - ₹ 50K
+                                </SelectItem>
+                                <SelectItem value="50k-100k">
+                                  ₹ 50K - ₹ 100K
+                                </SelectItem>
+                                <SelectItem value="100k-250k">
+                                  ₹ 100K - ₹ 250K
+                                </SelectItem>
+                                <SelectItem value="250k+">₹ 250K+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="submit"
+                      disabled={isGenerating}
+                      className={`sm:col-span-2 ${
+                        isGenerating
+                          ? 'bg-gradient-to-r from-green-500 to-green-700 animate-progress'
+                          : 'bg-green-600 hover:bg-green-700'
+                      }`}
+                    >
+                      {isGenerating ? (
+                        <span className="w-full text-center">Generating…</span>
+                      ) : (
+                        <span>Generate PDF</span>
+                      )}
+                    </Button>
+                    <p className="text-muted-foreground text-xs sm:col-span-2">
+                      You acknowledge that you've reviewed and agreed to our{" "}
+                      <a href="https://www.lovelytrails.com/privacy.php" target="_blank" className="text-primary hover:underline">
+                        Privacy Policy
+                      </a>{" "}
+                      and{" "}
+                      <a href="https://www.lovelytrails.com/tnc.php" target="_blank" className="text-primary hover:underline">
+                        Terms of Service
+                      </a>
+                    </p>
+                  </div>
                 </form>
               </Form>
             </div>

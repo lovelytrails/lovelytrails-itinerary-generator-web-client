@@ -72,3 +72,9 @@
 img {
   transition: filter 0.3s ease, opacity 0.3s ease;
 }
+
+.field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.0rem; /* same as Tailwind's gap-y-2 */
+}
