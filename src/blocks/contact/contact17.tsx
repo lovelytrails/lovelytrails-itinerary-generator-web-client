@@ -418,7 +418,7 @@ const Contact17 = () => {
 
                   <FormField
                     control={form.control}
-                    name="exclusionss"
+                    name="exclusions"
                     rules={{ required: "Exclusions are required" }}
                     render={({ field, fieldState }) => (
                       <FormItem className="sm:col-span-2">
