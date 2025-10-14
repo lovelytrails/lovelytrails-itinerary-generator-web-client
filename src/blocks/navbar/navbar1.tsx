@@ -85,7 +85,7 @@ const Navbar1 = ({
         <nav className="hidden justify-between lg:flex px-10 py-5 shadow-md z-50 bg-secondary">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <a href={logo.url} target="_blank" className="flex items-center gap-2">
               <img
                 src={logoSrc}
                 className="max-h-10"
@@ -119,7 +119,7 @@ const Navbar1 = ({
         <div className="block lg:hidden px-6 py-5">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <a href={logo.url} target="_blank" className="flex items-center gap-2">
               <img
                 src={logoSrc}
                 className="max-h-10"
@@ -141,7 +141,7 @@ const Navbar1 = ({
                 <SheetHeader>
                   <SheetTitle>
                     <div className="flex items-center justify-between gap-4">
-                      <a href={logo.url} className="flex items-center gap-2">
+                      <a href={logo.url} target="_blank" className="flex items-center gap-2">
                         <img
                           src={logoSrc}
                           className="max-h-10"
