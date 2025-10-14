@@ -415,7 +415,7 @@ const Contact17 = () => {
                         />
                         <div className="flex justify-end gap-2 mt-2">
                           {index === dayBlocks.length - 1 && dayBlocks.length < selectedDays && (
-                            <Button type="button" onClick={addDayBlock} variant="outline">
+                            <Button type="button" onClick={addDayBlock} variant="default">
                               ➕ Add Day
                             </Button>
                           )}
@@ -481,7 +481,7 @@ const Contact17 = () => {
                         />
                         <div className="flex justify-end gap-2 mt-2">
                           {index === costBlocks.length - 1 && costBlocks.length < 10 && (
-                            <Button type="button" onClick={addCostBlock} variant="outline">
+                            <Button type="button" onClick={addCostBlock} variant="default">
                               ➕ Add Cost
                             </Button>
                           )}
