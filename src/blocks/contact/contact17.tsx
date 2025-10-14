@@ -48,7 +48,6 @@ const Contact17 = () => {
   return (
     <section className="bg-muted/200 py-32">
       <div className="container">
-        <span className="text-muted-foreground text-xs">GET STARTED /</span>
         <div className="mt-8 grid grid-cols-1 gap-8 md:gap-10 lg:grid-cols-2 lg:grid-rows-[min-content_1fr]">
           <h2 className="order-1 text-4xl font-medium tracking-tight md:order-none md:text-5xl">
             Get in touch
@@ -246,28 +245,6 @@ const Contact17 = () => {
                 className="max-w-24 dark:invert"
               />
             </div>
-          </div>
-        </div>
-        <div className="mt-16 grid gap-8 md:gap-12 lg:w-1/2 lg:grid-cols-2">
-          <div>
-            <h3 className="mb-1.5 font-bold">FAQ</h3>
-            <p className="text-muted-foreground text-sm">
-              Browse our collection of{" "}
-              <a href="#" className="text-primary underline hover:underline">
-                Frequently Asked Questions
-              </a>{" "}
-              about our process and project delivery.
-            </p>
-          </div>
-          <div>
-            <h3 className="mb-1.5 font-bold">Resources</h3>
-            <p className="text-muted-foreground text-sm">
-              Access our library and connect with designers in our{" "}
-              <a href="#" className="text-primary underline hover:underline">
-                resource center
-              </a>{" "}
-              filled with whitepapers and tutorials.
-            </p>
           </div>
         </div>
       </div>

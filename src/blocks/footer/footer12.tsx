@@ -1,20 +1,9 @@
 import { ArrowUpRight } from "lucide-react";
 
 const Footer12 = () => {
-  const navigation = [
-    { name: "Product", href: "#" },
-    { name: "About Us", href: "#" },
-    { name: "Pricing", href: "#" },
-    { name: "FAQ", href: "#" },
-    { name: "Contact", href: "#" },
-  ];
-
-  const social = [
-    { name: "Twitter", href: "#" },
-    { name: "LinkedIn", href: "#" },
-  ];
-
-  const legal = [{ name: "Privacy Policy", href: "#" }];
+  const navigation = [ ];
+  const social = [ ];
+  const legal = [ ];
 
   return (
     <section className="flex flex-col items-center gap-14 py-32">
