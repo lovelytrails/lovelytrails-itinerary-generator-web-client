@@ -84,6 +84,10 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "progress": "progressFill 10s linear forwards",
+      },
+      backgroundSize: {
+        "progress": "100% 100%",
       },
     },
   },

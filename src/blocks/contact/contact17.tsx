@@ -47,6 +47,7 @@ const Contact17 = () => {
 
   const [dayBlocks, setDayBlocks] = React.useState([{ uid: crypto.randomUUID() }]);
   const [costBlocks, setCostBlocks] = React.useState([{ uid: crypto.randomUUID() }]);
+  const [isGenerating, setIsGenerating] = React.useState(false);
 
   const selectedDays = parseInt(form.watch("days") || "0", 10);
 
@@ -69,7 +70,8 @@ const Contact17 = () => {
     setCostBlocks(costBlocks.filter((block) => block.uid !== uid));
   };
 
-  const onSubmit = (data: Record<string, any>) => {
+  const onSubmit = async (data: Record<string, any>) => {
+    setIsGenerating(true);
     const {
       title,
       name,
@@ -121,6 +123,55 @@ const Contact17 = () => {
     };
 
     console.log(JSON.stringify(output, null, 2));
+
+    // try {
+    //   const response = await fetch("http://localhost:3000/trip/stream", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(output),
+    //   });
+
+    //   if (!response.ok) throw new Error("Failed to fetch PDF");
+
+    //   const blob = await response.blob();
+    //   const url = URL.createObjectURL(blob);
+
+    //   const link = document.createElement("a");
+    //   link.href = url;
+    //   link.download = "itinerary.pdf";
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   link.remove();
+    //   URL.revokeObjectURL(url);
+    // } catch (error) {
+    //   console.error("PDF download failed:", error);
+    // }
+
+    try {
+      const response = await fetch("http://localhost:3000/trip/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(output),
+      });
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "itinerary.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("PDF download failed:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+
   };
 
 
@@ -521,7 +572,7 @@ const Contact17 = () => {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="exclusions"
@@ -582,9 +633,20 @@ const Contact17 = () => {
                       </FormItem>
                     )}
                   />
-
-                  <Button type="submit" className="sm:col-span-2">
-                    Submit
+                  <Button
+                    type="submit"
+                    disabled={isGenerating}
+                    className={`sm:col-span-2 ${
+                      isGenerating
+                        ? 'bg-gradient-to-r from-green-500 to-green-700 animate-progress'
+                        : 'bg-green-600 hover:bg-green-700'
+                    }`}
+                  >
+                    {isGenerating ? (
+                      <span className="w-full text-center">Generating…</span>
+                    ) : (
+                      <span>Generate PDF</span>
+                    )}
                   </Button>
                   <p className="text-muted-foreground text-xs sm:col-span-2">
                     You acknowledge that you've reviewed and agreed to our{" "}
