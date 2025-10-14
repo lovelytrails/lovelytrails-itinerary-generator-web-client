@@ -123,38 +123,11 @@ const Contact17 = () => {
 
     console.log(JSON.stringify(output, null, 2));
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-    // if (isMobile) {
-    //   window.open("https://lovelytrails-itinerary-generator-web-server.vercel.app/trip/stream", "_blank");
-    // } else {
-    //   setIsGenerating(true);
-    //   try {
-    //     const response = await fetch("https://lovelytrails-itinerary-generator-web-server.vercel.app/trip/stream", {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify(output),
-    //     });
-
-    //     const blob = await response.blob();
-    //     const url = URL.createObjectURL(blob);
-
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.download = "itinerary.pdf";
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.remove();
-    //     URL.revokeObjectURL(url);
-    //   } catch (error) {
-    //     console.error("PDF download failed:", error);
-    //   } finally {
-    //     setIsGenerating(false);
-    //   }
-    // }
+    const apiUrl = import.meta.env.PUBLIC_API_URL;
 
     setIsGenerating(true);
     try {
-      const response = await fetch("https://lovelytrails-itinerary-generator-web-server.vercel.app/trip/stream", {
+      const response = await fetch(`${apiUrl}/trip/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(output),
