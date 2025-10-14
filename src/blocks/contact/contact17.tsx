@@ -123,30 +123,35 @@ const Contact17 = () => {
     };
 
     console.log(JSON.stringify(output, null, 2));
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    try {
-      const response = await fetch("http://localhost:3000/trip/stream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(output),
-      });
+    if (isMobile) {
+      window.open("http://localhost:3000/trip/stream", "_blank");
+    } else {
+      try {
+        const response = await fetch("http://localhost:3000/trip/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(output),
+        });
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "itinerary.pdf";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("PDF download failed:", error);
-    } finally {
-      setIsGenerating(false);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "itinerary.pdf";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("PDF download failed:", error);
+      } finally {
+        setIsGenerating(false);
+      }
     }
-
+    
   };
 
 
