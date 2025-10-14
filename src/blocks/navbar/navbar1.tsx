@@ -58,6 +58,8 @@ interface Navbar1Props {
   };
 }
 
+
+
 const Navbar1 = ({
   logo = {
     url: "https://www.lovelytrails.com",
@@ -71,6 +73,11 @@ const Navbar1 = ({
     signup: { title: "Sign up", url: "#" },
   },
 }: Navbar1Props) => {
+  const { theme, resolvedTheme } = useTheme();
+  const logoSrc =
+    resolvedTheme === "dark"
+      ? "/assets/images/logo-white.png"
+      : "/assets/images/logo-black.png";
   return (
     <section className="bg-muted">
       <div className="container-fluid p-0">
@@ -80,8 +87,8 @@ const Navbar1 = ({
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
               <img
-                src={logo.src}
-                className="max-h-10 dark:invert"
+                src={logoSrc}
+                className="max-h-10"
                 alt={logo.alt}
               />
               <span className="text-lg font-semibold tracking-tighter">
@@ -114,16 +121,21 @@ const Navbar1 = ({
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
               <img
-                src={logo.src}
-                className="max-h-10 dark:invert"
+                src={logoSrc}
+                className="max-h-10"
                 alt={logo.alt}
               />
             </a>
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
-                </Button>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <ThemeToggle />
+                </ThemeProvider>
               </SheetTrigger>
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
@@ -131,8 +143,8 @@ const Navbar1 = ({
                     <div className="flex items-center justify-between gap-4">
                       <a href={logo.url} className="flex items-center gap-2">
                         <img
-                          src={logo.src}
-                          className="max-h-10 dark:invert"
+                          src={logoSrc}
+                          className="max-h-10"
                           alt={logo.alt}
                         />
                       </a>
@@ -156,7 +168,7 @@ const Navbar1 = ({
                     className="flex w-full flex-col gap-4"
                   >
                     {menu.map((item) => renderMobileMenuItem(item))}
-                  </Accordion>                  
+                  </Accordion>
                 </div>
               </SheetContent>
             </Sheet>

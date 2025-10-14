@@ -68,3 +68,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+img {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
