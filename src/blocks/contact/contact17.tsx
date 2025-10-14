@@ -414,11 +414,12 @@ const Contact17 = () => {
                           )}
                         />
                         <div className="flex justify-end gap-2 mt-2">
-                          {index === dayBlocks.length - 1 && dayBlocks.length < selectedDays ? (
+                          {index === dayBlocks.length - 1 && dayBlocks.length < selectedDays && (
                             <Button type="button" onClick={addDayBlock} variant="outline">
                               ➕ Add Day
                             </Button>
-                          ) : (
+                          )}
+                          {dayBlocks.length > 1 && (
                             <Button
                               type="button"
                               onClick={() => deleteDayBlock(block.uid)}
@@ -431,7 +432,6 @@ const Contact17 = () => {
                       </div>
                     ))}
                   </div>
-                  
                   <br />
                   <div className="col-span-2 space-y-4">
                     <h3 className="text-lg font-semibold mt-6">Cost Details</h3>
@@ -480,11 +480,12 @@ const Contact17 = () => {
                           )}
                         />
                         <div className="flex justify-end gap-2 mt-2">
-                          {index === costBlocks.length - 1 && costBlocks.length < 10 ? (
+                          {index === costBlocks.length - 1 && costBlocks.length < 10 && (
                             <Button type="button" onClick={addCostBlock} variant="outline">
                               ➕ Add Cost
                             </Button>
-                          ) : (
+                          )}
+                          {costBlocks.length > 1 && (
                             <Button
                               type="button"
                               onClick={() => deleteCostBlock(block.uid)}
