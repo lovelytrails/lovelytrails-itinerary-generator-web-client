@@ -123,7 +123,6 @@ const Contact17 = () => {
       itinerary: Object.values(dayBlocks).sort((a, b) => Number(a.number) - Number(b.number)),
     };
 
-    console.log(JSON.stringify(output, null, 2));
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const apiUrl = import.meta.env.PUBLIC_API_URL;
 
