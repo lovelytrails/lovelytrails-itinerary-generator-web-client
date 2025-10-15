@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact17 = () => {
   const form = useForm({
@@ -50,6 +51,7 @@ const Contact17 = () => {
   const [isGenerating, setIsGenerating] = React.useState(false);
 
   const selectedDays = parseInt(form.watch("days") || "0", 10);
+  const { toast } = useToast();
 
   const addDayBlock = () => {
     setDayBlocks([...dayBlocks, { uid: crypto.randomUUID() }]);
@@ -127,45 +129,55 @@ const Contact17 = () => {
 
     setIsGenerating(true);
     try {
-    const response = await fetch(`${apiUrl}/graphql`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `
-          mutation GeneratePdf($input: CreateTripInput!) {
-            generatePdf(input: $input)
-          }
-        `,
-        variables: { input: output },
-      }),
-    });
+      const response = await fetch(`${apiUrl}/graphql`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `
+            mutation GeneratePdf($input: CreateTripInput!) {
+              generatePdf(input: $input)
+            }
+          `,
+          variables: { input: output },
+        }),
+      });
 
-    if (!response.ok) throw new Error("GraphQL request failed");
+      const result = await response.json();
 
-    const { data, errors } = await response.json();
-    if (errors || !data?.generatePdf) throw new Error("PDF generation failed");
+      if (!response.ok || result.errors || !result.data?.generatePdf) {
+        const graphqlMessage =
+          result.errors?.[0]?.message || "PDF generation failed";
 
-    const base64 = data.generatePdf;
-    const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], {
-      type: "application/pdf",
-    });
+        toast({
+          variant: "destructive",
+          title: "PDF generation failed",
+          description: graphqlMessage,
+        });
 
-    const url = window.URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "itinerary.pdf";
-    anchor.style.display = "none";
-    document.body.appendChild(anchor);
-    anchor.click();
+        throw new Error(graphqlMessage);
+      }
 
-    document.body.removeChild(anchor);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("PDF download failed:", error);
-    setIsGenerating(false);
-  } finally {
-    setIsGenerating(false);
-  }
+      const base64 = result.data.generatePdf;
+      const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], {
+        type: "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "itinerary.pdf";
+      anchor.style.display = "none";
+      document.body.appendChild(anchor);
+      anchor.click();
+
+      document.body.removeChild(anchor);
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      setIsGenerating(false);
+      console.error("PDF download failed:", error);
+    } finally {
+      setIsGenerating(false);
+    }
 
 };
 

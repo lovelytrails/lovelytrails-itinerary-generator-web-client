@@ -8,6 +8,7 @@ import "@/styles/globals.css";
 import "@/styles/custom.css";
 import { Button } from "@/components/ui/button";
 import { ChevronUp } from "lucide-react";
+import { Toaster } from "@/components/ui/toaster";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [showButton, setShowButton] = useState(false);
@@ -43,6 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <section className="py-16 px-[1.5rem] lg:px-[5rem]">
             <main>{children}</main>
           </section>
+          <Toaster />
           <Footer12 />
           {showButton && (
             <Button
