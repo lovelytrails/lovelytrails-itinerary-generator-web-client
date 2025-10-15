@@ -151,6 +151,7 @@ const Contact17 = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("PDF download failed:", error);
+      setIsGenerating(false);
     } finally {
       setIsGenerating(false);
     }
