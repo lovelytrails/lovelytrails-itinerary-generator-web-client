@@ -134,8 +134,8 @@ const Contact17 = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: `
-            mutation GeneratePdf($input: CreateTripInput!) {
-              generatePdf(input: $input)
+            mutation createTripAndFetchPdf($input: CreateTripInput!) {
+              createTripAndFetchPdf(input: $input)
             }
           `,
           variables: { input: output },
@@ -144,20 +144,27 @@ const Contact17 = () => {
 
       const result = await response.json();
 
-      if (!response.ok || result.errors || !result.data?.generatePdf) {
-        const graphqlMessage =
-          result.errors?.[0]?.message || "PDF generation failed";
-
+      if (result.errors?.length) {
+        const message = result.errors[0].message || "PDF generation failed";
         toast({
           variant: "destructive",
           title: "PDF generation failed",
-          description: graphqlMessage,
+          description: message,
         });
-
-        throw new Error(graphqlMessage);
+        return;
       }
 
-      const base64 = result.data.generatePdf;
+      const base64 = result.data?.createTripAndFetchPdf;
+
+      if (!base64) {
+        toast({
+          variant: "destructive",
+          title: "PDF generation failed",
+          description: "No PDF data returned",
+        });
+        return;
+      }
+
       const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], {
         type: "application/pdf",
       });
@@ -178,9 +185,7 @@ const Contact17 = () => {
     } finally {
       setIsGenerating(false);
     }
-
-};
-
+  };
 
   const currentYear = new Date().getFullYear();
   const minDate = new Date(); // Current date
