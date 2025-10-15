@@ -127,36 +127,47 @@ const Contact17 = () => {
 
     setIsGenerating(true);
     try {
-      const response = await fetch(`${apiUrl}/trip/stream`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(output),
-      });
+    const response = await fetch(`${apiUrl}/graphql`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          mutation GeneratePdf($input: CreateTripInput!) {
+            generatePdf(input: $input)
+          }
+        `,
+        variables: { input: output },
+      }),
+    });
 
-      if (!response.ok) throw new Error("Failed to fetch PDF");
+    if (!response.ok) throw new Error("GraphQL request failed");
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+    const { data, errors } = await response.json();
+    if (errors || !data?.generatePdf) throw new Error("PDF generation failed");
 
-      // Create a temporary anchor and trigger download
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = "itinerary.pdf";
-      anchor.style.display = "none";
-      document.body.appendChild(anchor);
-      anchor.click();
+    const base64 = data.generatePdf;
+    const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], {
+      type: "application/pdf",
+    });
 
-      // Clean up
-      document.body.removeChild(anchor);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("PDF download failed:", error);
-      setIsGenerating(false);
-    } finally {
-      setIsGenerating(false);
-    }
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "itinerary.pdf";
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+    anchor.click();
 
-  };
+    document.body.removeChild(anchor);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("PDF download failed:", error);
+    setIsGenerating(false);
+  } finally {
+    setIsGenerating(false);
+  }
+
+};
 
 
   const currentYear = new Date().getFullYear();
