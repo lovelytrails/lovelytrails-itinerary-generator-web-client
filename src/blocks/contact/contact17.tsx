@@ -113,10 +113,10 @@ const Contact17 = () => {
       pax,
       fromDate,
       toDate,
-      days,
+      days: Number(days),
       inclusions,
       exclusions,
-      approximateCost,
+      approximateCost: approximateCost?.trim() || "Not specified",
       costs: Object.values(costBlocks),
       itinerary: Object.values(dayBlocks).sort((a, b) => Number(a.number) - Number(b.number)),
     };
