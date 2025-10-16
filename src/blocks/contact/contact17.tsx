@@ -36,7 +36,7 @@ const Contact17 = () => {
       days: "",
       inclusions: "",
       exclusions: "",
-      approximateCost: "",
+      approximateCost: ""
     },
     shouldUnregister: true,
   });
@@ -49,6 +49,7 @@ const Contact17 = () => {
   const [dayBlocks, setDayBlocks] = React.useState([{ uid: crypto.randomUUID() }]);
   const [costBlocks, setCostBlocks] = React.useState([{ uid: crypto.randomUUID() }]);
   const [isGenerating, setIsGenerating] = React.useState(false);
+  const [useCache, setUseCache] = React.useState(true);
 
   const selectedDays = parseInt(form.watch("days") || "0", 10);
   const { toast } = useToast();
@@ -121,6 +122,7 @@ const Contact17 = () => {
       approximateCost: approximateCost?.trim() || "Not specified",
       costs: Object.values(costBlocks),
       itinerary: Object.values(dayBlocks).sort((a, b) => Number(a.number) - Number(b.number)),
+      useCache,
     };
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -653,21 +655,32 @@ const Contact17 = () => {
                         </FormItem>
                       )}
                     />
-                    <Button
-                      type="submit"
-                      disabled={isGenerating}
-                      className={`sm:col-span-2 ${
-                        isGenerating
-                          ? 'bg-gradient-to-r from-green-500 to-green-700 animate-progress'
-                          : 'bg-green-600 hover:bg-green-700'
-                      }`}
-                    >
-                      {isGenerating ? (
-                        <span className="w-full text-center">Generating…</span>
-                      ) : (
-                        <span>Generate PDF</span>
-                      )}
-                    </Button>
+                    <div className="sm:col-span-2 flex flex-wrap gap-2 items-center">
+                      <Button
+                        type="submit"
+                        disabled={isGenerating}
+                        className={`flex-1 ${
+                          isGenerating
+                            ? 'bg-gradient-to-r from-green-500 to-green-700 animate-progress'
+                            : 'bg-green-600 hover:bg-green-700'
+                        }`}
+                      >
+                        {isGenerating ? (
+                          <span className="w-full text-center">Generating…</span>
+                        ) : (
+                          <span>Generate PDF</span>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setUseCache((prev) => !prev)}
+                        className="flex-shrink-0"
+                      >
+                        {useCache ? '✅ Cache Enabled' : '🚫 Cache Disabled'}
+                      </Button>
+                    </div>
+
                     <p className="text-muted-foreground text-xs sm:col-span-2">
                       You acknowledge that you've reviewed and agreed to our{" "}
                       <a href="https://www.lovelytrails.com/privacy.php" target="_blank" className="text-primary hover:underline">
@@ -678,6 +691,7 @@ const Contact17 = () => {
                         Terms of Service
                       </a>
                     </p>
+
                   </div>
                 </form>
               </Form>
