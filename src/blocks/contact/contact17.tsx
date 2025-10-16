@@ -143,13 +143,21 @@ const Contact17 = () => {
 
       const result = await response.json();
 
-      if (result.errors?.length) {
-        const message = result.errors[0].message || "PDF generation failed";
+      if (Array.isArray(result.errors) && result.errors.length > 0) {
+        const rawError = result.errors[0];
+        const message =
+          typeof rawError === 'string'
+            ? rawError
+            : typeof rawError?.message === 'string'
+            ? rawError.message
+            : 'PDF generation failed';
+        const prefix = message.includes('Int cannot') || message.includes('Field') ? '⚠️ ' : '❌ ';
         toast({
-          variant: "destructive",
-          title: "PDF generation failed",
+          variant: 'destructive',
+          title: `${prefix} PDF generation failed`,
           description: message,
         });
+
         return;
       }
 
