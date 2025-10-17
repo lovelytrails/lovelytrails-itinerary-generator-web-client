@@ -29,6 +29,7 @@ const Contact17 = () => {
   const form = useForm({
     defaultValues: {
       title: "",
+      destination: "",
       name: "",
       pax: "",
       fromDate: "",
@@ -76,6 +77,7 @@ const Contact17 = () => {
   const onSubmit = async (data: Record<string, any>) => {
     const {
       title,
+      destination,
       name,
       pax,
       fromDate,
@@ -112,6 +114,7 @@ const Contact17 = () => {
     // Final structured output
     const output = {
       title,
+      destination,
       name,
       pax,
       fromDate,
@@ -226,6 +229,27 @@ const Contact17 = () => {
                             <Input
                               {...field}
                               placeholder="Dubai - 6 Days Trip"
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <p className="text-sm text-destructive mt-1">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="destination"
+                      rules={{ required: "Destination is required" }}
+                      render={({ field, fieldState }) => (
+                        <FormItem className="sm:col-span-2">
+                          <FormLabel>Destination</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Dubai"
                             />
                           </FormControl>
                           {fieldState.error && (
