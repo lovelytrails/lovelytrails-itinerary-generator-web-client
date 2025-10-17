@@ -51,6 +51,7 @@ const Contact17 = () => {
   const [costBlocks, setCostBlocks] = React.useState([{ uid: crypto.randomUUID() }]);
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [useCache, setUseCache] = React.useState(true);
+  const [fromDateValue, setFromDateValue] = React.useState<Date | null>(null);
 
   const selectedDays = parseInt(form.watch("days") || "0", 10);
   const { toast } = useToast();
@@ -332,10 +333,10 @@ const Contact17 = () => {
                                 endMonth={maxDate}
                                 onSelect={(selectedDate) => {
                                   field.onChange(selectedDate);
+                                  setFromDateValue(selectedDate); // ⬅️ triggers re-render of toDate
                                   setFromDateOpen(false);
                                 }}
                               />
-
                             </PopoverContent>
                           </Popover>
                           {fieldState.error && (
@@ -351,44 +352,51 @@ const Contact17 = () => {
                       control={form.control}
                       name="toDate"
                       rules={{ required: "Please select the to date" }}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <FormLabel>To Date</FormLabel>
-                          <Popover open={toOpen} onOpenChange={setToDateOpen}>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <button
-                                  type="button"
-                                  className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
-                                    field.value ? "text-foreground" : "text-muted-foreground"
-                                  }`}
-                                >
-                                  {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
-                                </button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={field.value}
-                                captionLayout="dropdown"
-                                disabled={(date) => date < minDate || date > maxDate}
-                                startMonth={minDate}
-                                endMonth={maxDate}
-                                onSelect={(selectedDate) => {
-                                  field.onChange(selectedDate); // ✅ updates react-hook-form
-                                  setToDateOpen(false);
-                                }}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                          {fieldState.error && (
+                      render={({ field, fieldState }) => {
+                        return (
+                          <FormItem>
+                            <FormLabel>To Date</FormLabel>
+                            <Popover open={toOpen} onOpenChange={setToDateOpen}>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <button
+                                    type="button"
+                                    className={`w-full px-3 py-2 text-left border rounded-md bg-background text-sm ${
+                                      field.value ? "text-foreground" : "text-muted-foreground"
+                                    }`}
+                                  >
+                                    {field.value ? format(field.value, "dd MMM yyyy") : "Pick a date"}
+                                  </button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0">
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value || fromDateValue}
+                                  month={fromDateValue} // ⬅️ This sets the initial view to fromDate's month
+                                  captionLayout="dropdown"
+                                  disabled={(date) => {
+                                    const isBeforeFromDate = fromDateValue ? date < fromDateValue : false;
+                                    const isOutsideRange = date < minDate || date > maxDate;
+                                    return isBeforeFromDate || isOutsideRange;
+                                  }}
+                                  startMonth={minDate}
+                                  endMonth={maxDate}
+                                  onSelect={(selectedDate) => {
+                                    field.onChange(selectedDate);
+                                    setToDateOpen(false);
+                                  }}
+                                />
+                              </PopoverContent>
+                            </Popover>
+                            {fieldState.error && (
                               <p className="text-sm text-destructive mt-1">
                                 {fieldState.error.message}
                               </p>
                             )}
-                        </FormItem>
-                      )}
+                          </FormItem>
+                        );
+                      }}
                     />
                     <div className="col-span-2 space-y-4">
                       <h3 className="text-lg font-semibold">Day Details</h3>
