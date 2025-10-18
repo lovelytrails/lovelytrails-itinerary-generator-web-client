@@ -167,7 +167,6 @@ const Contact17 = () => {
     };
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    // const apiUrl = import.meta.env.PUBLIC_API_URL;
 
     setIsGenerating(true);
     const payload = {
