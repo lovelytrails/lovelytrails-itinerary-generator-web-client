@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const apiUrl = import.meta.env.PUBLIC_API_URL;
 
-async function fetchWithRetry(payload, retries = 5) {
+async function fetchWithRetry(payload, retries = 10) {
   const isDev = import.meta.env.NODE_ENV === 'development';
 
   for (let i = 0; i < retries; i++) {
