@@ -148,6 +148,7 @@ const Contact17 = () => {
       });
 
       const result = await response.json();
+      console.log(result);
 
       if (Array.isArray(result.errors) && result.errors.length > 0) {
         const rawError = result.errors[0];
