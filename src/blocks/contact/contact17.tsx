@@ -28,6 +28,8 @@ import { useToast } from "@/hooks/use-toast";
 const apiUrl = import.meta.env.PUBLIC_API_URL;
 
 async function fetchWithRetry(payload, retries = 5) {
+  const isDev = import.meta.env.NODE_ENV === 'development';
+
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(`${apiUrl}/graphql`, {
@@ -38,18 +40,21 @@ async function fetchWithRetry(payload, retries = 5) {
 
       if (res.ok) {
         return await res;
-      } else {
+      } else if (isDev) {
         console.warn(`🔁 Retry ${i + 1}/${retries} — status: ${res.status}`);
       }
     } catch (err) {
-      console.warn(`⚠️ Retry ${i + 1}/${retries} — network error: ${err.message}`);
+      if (isDev) {
+        console.warn(`⚠️ Retry ${i + 1}/${retries} — network error: ${err.message}`);
+      }
     }
 
-    await new Promise((r) => setTimeout(r, 1000 * (i + 1))); // exponential backoff
+    await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
   }
 
   throw new Error('GraphQL endpoint failed after retries');
 }
+
 
 const Contact17 = () => {
   const form = useForm({
