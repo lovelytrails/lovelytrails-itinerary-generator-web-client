@@ -55,6 +55,10 @@ async function fetchWithRetry(payload, retries = 10) {
   throw new Error('GraphQL endpoint failed after retries');
 }
 
+function calculateTripDays(fromDate: Date, toDate: Date): number {
+  const diffMs = toDate.getTime() - fromDate.getTime();
+  return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1; // inclusive of both dates
+}
 
 const Contact17 = () => {
   const form = useForm({
@@ -83,6 +87,7 @@ const Contact17 = () => {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [useCache, setUseCache] = React.useState(true);
   const [fromDateValue, setFromDateValue] = React.useState<Date | null>(null);
+  const [maxDays, setMaxDays] = React.useState(50);
 
   const selectedDays = parseInt(form.watch("days") || "0", 10);
   const { toast } = useToast();
@@ -360,9 +365,14 @@ const Contact17 = () => {
                                 startMonth={minDate}
                                 endMonth={maxDate}
                                 onSelect={(selectedDate) => {
+                                  setFromDate(selectedDate);
                                   field.onChange(selectedDate);
                                   setFromDateValue(selectedDate); // ⬅️ triggers re-render of toDate
                                   setFromDateOpen(false);
+                                  if (selectedDate && toDate) {
+                                    const days = calculateTripDays(selectedDate, toDate);
+                                    setMaxDays(days);
+                                  }
                                 }}
                               />
                             </PopoverContent>
@@ -411,8 +421,13 @@ const Contact17 = () => {
                                   startMonth={minDate}
                                   endMonth={maxDate}
                                   onSelect={(selectedDate) => {
+                                    setToDate(selectedDate);
                                     field.onChange(selectedDate);
                                     setToDateOpen(false);
+                                    if (fromDate && selectedDate) {
+                                      const days = calculateTripDays(fromDate, selectedDate);
+                                      setMaxDays(days);
+                                    };
                                   }}
                                 />
                               </PopoverContent>
@@ -444,7 +459,7 @@ const Contact17 = () => {
                                   <SelectValue placeholder="Select number of days" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-80 overflow-y-auto">
-                                  {Array.from({ length: 50 }, (_, i) => (
+                                  {Array.from({ length: maxDays }, (_, i) => (
                                     <SelectItem key={i + 1} value={(i + 1).toString()}>
                                       {i + 1}
                                     </SelectItem>
