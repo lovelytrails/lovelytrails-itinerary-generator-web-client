@@ -56,8 +56,9 @@ async function fetchWithRetry(payload, retries = 10) {
 }
 
 function calculateTripDays(fromDate: Date, toDate: Date): number {
+  if (!fromDate || !toDate) return 50;
   const diffMs = toDate.getTime() - fromDate.getTime();
-  return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1; // inclusive of both dates
+  return Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1);
 }
 
 const Contact17 = () => {
