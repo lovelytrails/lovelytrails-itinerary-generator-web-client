@@ -25,6 +25,32 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
+const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+async function fetchWithRetry(payload, retries = 5) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(`${apiUrl}/graphql`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        return await res;
+      } else {
+        console.warn(`🔁 Retry ${i + 1}/${retries} — status: ${res.status}`);
+      }
+    } catch (err) {
+      console.warn(`⚠️ Retry ${i + 1}/${retries} — network error: ${err.message}`);
+    }
+
+    await new Promise((r) => setTimeout(r, 1000 * (i + 1))); // exponential backoff
+  }
+
+  throw new Error('GraphQL endpoint failed after retries');
+}
+
 const Contact17 = () => {
   const form = useForm({
     defaultValues: {
@@ -130,23 +156,20 @@ const Contact17 = () => {
     };
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const apiUrl = import.meta.env.PUBLIC_API_URL;
+    // const apiUrl = import.meta.env.PUBLIC_API_URL;
 
     setIsGenerating(true);
+    const payload = {
+      query: `
+        mutation createTripAndFetchPdf($input: CreateTripInput!) {
+          createTripAndFetchPdf(input: $input)
+        }
+      `,
+      variables: { input: output },
+    };
+
     try {
-      const response = await fetch(`${apiUrl}/graphql`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: `
-            mutation createTripAndFetchPdf($input: CreateTripInput!) {
-              createTripAndFetchPdf(input: $input)
-            }
-          `,
-          variables: { input: output },
-        }),
-      });
-      console.log(response);
+      const response = await fetchWithRetry(payload);
       const result = await response.json();
 
       if (Array.isArray(result.errors) && result.errors.length > 0) {
