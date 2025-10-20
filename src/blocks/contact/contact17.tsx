@@ -255,8 +255,22 @@ const Contact17 = () => {
       toast({
         variant: "destructive",
         title: "❌ PDF generation failed",
-        description: "Network error or server unreachable",
+        description: (
+          <>
+            Network error or server unreachable.{" "}
+            <a
+              href="https://www.vercel-status.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-white hover:text-gray-200 font-medium"
+            >
+              Check live server status
+            </a>
+            .
+          </>
+        ),
       });
+
     } finally {
       setIsGenerating(false);
     }
