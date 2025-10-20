@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const apiUrl = import.meta.env.PUBLIC_API_URL;
 
-async function fetchWithRetry(payload, retries = 10) {
+async function fetchWithRetry(payload, retries = 3) {
   const isDev = import.meta.env.NODE_ENV === 'development';
 
   for (let i = 0; i < retries; i++) {
@@ -49,7 +49,7 @@ async function fetchWithRetry(payload, retries = 10) {
       }
     }
 
-    await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+    await new Promise((r) => setTimeout(r, 5000 * (i + 1)));
   }
 
   throw new Error('GraphQL endpoint failed after retries');
