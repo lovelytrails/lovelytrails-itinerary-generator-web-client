@@ -180,19 +180,43 @@ const Contact17 = () => {
 
     try {
       const response = await fetchWithRetry(payload);
+
+      if (!response.ok) {
+        const errorText = await response.text(); // fallback for non-JSON errors
+        const vercelError = response.headers.get("x-vercel-error");
+        const status = response.status;
+
+        toast({
+          variant: "destructive",
+          title: "❌ PDF generation failed",
+          description: vercelError
+            ? `Server error (${status}): ${vercelError}`
+            : `Unexpected server error (${status})`,
+        });
+
+        console.error("Server error:", {
+          status,
+          vercelError,
+          body: errorText,
+        });
+
+        return;
+      }
+
       const result = await response.json();
 
       if (Array.isArray(result.errors) && result.errors.length > 0) {
         const rawError = result.errors[0];
         const message =
-          typeof rawError === 'string'
+          typeof rawError === "string"
             ? rawError
-            : typeof rawError?.message === 'string'
+            : typeof rawError?.message === "string"
             ? rawError.message
-            : 'PDF generation failed';
-        const prefix = message.includes('Int cannot') || message.includes('Field') ? '⚠️ ' : '❌ ';
+            : "PDF generation failed";
+
+        const prefix = message.includes("Int cannot") || message.includes("Field") ? "⚠️ " : "❌ ";
         toast({
-          variant: 'destructive',
+          variant: "destructive",
           title: `${prefix} PDF generation failed`,
           description: message,
         });
@@ -211,7 +235,7 @@ const Contact17 = () => {
         return;
       }
 
-      const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], {
+      const blob = new Blob([Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))], {
         type: "application/pdf",
       });
 
@@ -226,11 +250,17 @@ const Contact17 = () => {
       document.body.removeChild(anchor);
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
-      setIsGenerating(false);
       console.error("PDF download failed:", error);
+
+      toast({
+        variant: "destructive",
+        title: "❌ PDF generation failed",
+        description: "Network error or server unreachable",
+      });
     } finally {
       setIsGenerating(false);
     }
+
   };
 
   const currentYear = new Date().getFullYear();
