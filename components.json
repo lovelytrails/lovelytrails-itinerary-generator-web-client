@@ -20,6 +20,7 @@
     "blocks": "@/blocks",
     "pages": "@/pages",
     "styles": "@/styles",
+    "videos": "@/videos",
     "custom": "@/custom",
     "json": "@/json",
     "types": "@/types"

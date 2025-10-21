@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import VideoPlayer from "@/custom/VideoPlayer";
 
 const apiUrl = import.meta.env.PUBLIC_API_URL;
-const videoURL = "public/assets/videos/itinerary_generator.webm";
+const videoURL = "https://storage.googleapis.com/itinerary-generator-videos/itinerary_generator.webm";
 
 async function fetchWithRetry(payload, retries = 3) {
   const isDev = import.meta.env.NODE_ENV === 'development';
