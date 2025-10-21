@@ -24,8 +24,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import VideoPlayer from "@/custom/VideoPlayer";
 
 const apiUrl = import.meta.env.PUBLIC_API_URL;
+const videoURL = "/assets/videos/itinerary_generator.webm";
 
 async function fetchWithRetry(payload, retries = 3) {
   const isDev = import.meta.env.NODE_ENV === 'development';
@@ -817,6 +819,9 @@ const Contact17 = () => {
             </div>
           </div>
           <div className="order-3 my-6 md:order-none">
+            <div className="mx-auto mt-12 max-w-6xl rounded-lg border p-2">
+              <VideoPlayer videoURL={videoURL} />
+            </div>
             <p className="my-6 font-bold">
               Share your itinerary details
             </p>
