@@ -29,7 +29,7 @@ import VideoPlayer from "@/custom/VideoPlayer";
 const apiUrl = import.meta.env.PUBLIC_API_URL;
 const videoURL = "https://storage.googleapis.com/itinerary-generator-videos/itinerary_generator.webm";
 
-async function fetchWithRetry(payload, retries = 3) {
+async function fetchWithRetry(payload, retries = 5) {
   const isDev = import.meta.env.NODE_ENV === 'development';
 
   for (let i = 0; i < retries; i++) {
